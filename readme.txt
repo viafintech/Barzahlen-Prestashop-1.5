@@ -6,7 +6,7 @@ Barzahlen Payment Module (PrestaShop 1.5)
 http://www.barzahlen.de
 
 ==Current Version==
-1.0.2
+1.0.3
 
 ==User Manual==
 http://www.barzahlen.de/partner/integration/shopsysteme/14/prestashop

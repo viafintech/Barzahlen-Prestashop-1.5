@@ -27,18 +27,20 @@ define('SHOPID', '10483');
 define('PAYMENTKEY', 'de74310368a4718a48e0e244fbf3e22e2ae117f2');
 define('NOTIFICATIONKEY', 'e5354004de1001f86004090d01982a6e05da1c12');
 
-function emptyLog() {
+function emptyLog()
+{
   fclose(fopen("tests/barzahlen.log", "w"));
 }
 
-function writeLog($logFile, $message) {
+function writeLog($logFile, $message)
+{
   error_log($message, 3, $logFile);
 }
 
-class LoggerCore {
-
-  public function addLog($message, $level, $var1 = null, $var2 = null, $var3 = null, $var4 = false) {
+class Logger
+{
+  public function addLog($message, $level, $var1 = null, $var2 = null, $var3 = null, $var4 = false)
+  {
     // do nothing
   }
 }
-?>

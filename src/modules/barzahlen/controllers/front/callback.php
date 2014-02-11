@@ -35,7 +35,7 @@ class BarzahlenCallbackModuleFrontController extends ModuleFrontController
         try {
             $notification->validate();
         } catch (Exception $e) {
-            LoggerCore::addLog('Barzahlen/Callback: ' . $e, 3, null, null, null, true);
+            Logger::addLog('Barzahlen/Callback: ' . $e, 3, null, null, null, true);
         }
 
         if (!$notification->isValid()) {
@@ -46,7 +46,7 @@ class BarzahlenCallbackModuleFrontController extends ModuleFrontController
         $result = $this->_selectTransaction($notification);
 
         if (count($result) == 0) {
-            LoggerCore::addLog('Barzahlen/Callback: No pending transaction found for order ID ' . $notification->getOrderId() . ' and transaction ID ' . $notification->getTransactionId() . '.', 3, null, null, null, true);
+            Logger::addLog('Barzahlen/Callback: No pending transaction found for order ID ' . $notification->getOrderId() . ' and transaction ID ' . $notification->getTransactionId() . '.', 3, null, null, null, true);
             return;
         } else {
             $order = new Order($result[0]['order_id']);
@@ -62,7 +62,7 @@ class BarzahlenCallbackModuleFrontController extends ModuleFrontController
                 $this->_updateTransactionState($notification->getTransactionId(), self::STATE_EXPIRED);
                 break;
             default:
-                LoggerCore::addLog('Barzahlen/Callback: Unable to handle given state ' . $notification->getState() . '.', 3, null, null, null, true);
+                Logger::addLog('Barzahlen/Callback: Unable to handle given state ' . $notification->getState() . '.', 3, null, null, null, true);
         }
     }
 

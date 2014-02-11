@@ -55,7 +55,7 @@ abstract class Barzahlen_Base
             foreach ($data as $key => $value) {
                 $message .= ' - ' . $key . ':' . $value;
             }
-            LoggerCore::addLog($message, 1, null, null, null, true);
+            Logger::addLog($message, 1, null, null, null, true);
         }
     }
 

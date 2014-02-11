@@ -49,7 +49,7 @@ class BarzahlenValidationModuleFrontController extends ModuleFrontController
         try {
             $api->handleRequest($payment);
         } catch (Exception $e) {
-            LoggerCore::addLog('Barzahlen/Payment: ' . $e, 3, null, null, null, true);
+            Logger::addLog('Barzahlen/Payment: ' . $e, 3, null, null, null, true);
         }
 
         if (!$payment->isValid()) {
@@ -66,7 +66,7 @@ class BarzahlenValidationModuleFrontController extends ModuleFrontController
         try {
             $api->handleRequest($update);
         } catch (Exception $e) {
-            LoggerCore::addLog('Barzahlen/Payment: ' . $e, 3, null, null, null, true);
+            Logger::addLog('Barzahlen/Payment: ' . $e, 3, null, null, null, true);
         }
 
         Tools::redirectLink(__PS_BASE_URI__ . 'order-confirmation.php?key=' . $customer->secure_key . '&id_cart=' . (int) $this->context->cart->id . '&id_module=' . (int) $this->module->id . '&id_order=' . (int) $this->module->currentOrder);

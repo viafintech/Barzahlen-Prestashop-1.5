@@ -33,7 +33,7 @@ class Barzahlen extends PaymentModule
     {
         $this->name = 'barzahlen';
         $this->tab = 'payments_gateways';
-        $this->version = '1.0.2';
+        $this->version = '1.0.3';
         $this->author = 'Zerebro Internet GmbH';
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
@@ -311,7 +311,7 @@ class Barzahlen extends PaymentModule
         try {
             $api->handleRequest($cancel);
         } catch (Exception $e) {
-            LoggerCore::addLog('Barzahlen/Cancel: ' . $e, 3, null, null, null, true);
+            Logger::addLog('Barzahlen/Cancel: ' . $e, 3, null, null, null, true);
         }
 
         if ($cancel->isValid()) {
@@ -344,7 +344,7 @@ class Barzahlen extends PaymentModule
                           </script>';
                 }
             } catch (Exception $e) {
-                LoggerCore::addLog('Barzahlen/Check: ' . $e, 3, null, null, null, true);
+                Logger::addLog('Barzahlen/Check: ' . $e, 3, null, null, null, true);
             }
         }
     }

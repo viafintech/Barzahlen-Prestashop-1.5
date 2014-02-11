@@ -1,3 +1,9 @@
+==1.0.2 (26.06.2013)==
+* updated Barzahlen API PHP SDK
+* added automatic payment slip cancelation on order cancelation
+* implemented automatic plugin version check (weekly)
+* using PSR2 coding standard
+
 ==1.0.1 (11.03.2013)==
 * changed image urls to make use of https
 * updated cURL certificate bundle

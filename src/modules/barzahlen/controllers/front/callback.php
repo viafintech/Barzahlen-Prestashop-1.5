@@ -19,133 +19,101 @@
 
 require_once dirname(__FILE__) . '/../../api/loader.php';
 
-class BarzahlenCallbackModuleFrontController extends ModuleFrontController {
+class BarzahlenCallbackModuleFrontController extends ModuleFrontController
+{
+    const STATE_PENDING = 'pending';
+    const STATE_PAID = 'paid';
+    const STATE_EXPIRED = 'expired';
 
-  const STATE_PENDING = 'pending';
-  const STATE_PAID = 'paid';
-  const STATE_EXPIRED = 'expired';
+    /**
+     * @see FrontController::initContent()
+     */
+    public function initContent()
+    {
+        $notification = new Barzahlen_Notification(Configuration::get('barzahlen_shopid'), Configuration::get('barzahlen_notificationkey'), $_GET);
 
-  /**
-   * @see FrontController::initContent()
-   */
-  public function initContent() {
+        try {
+            $notification->validate();
+        } catch (Exception $e) {
+            LoggerCore::addLog('Barzahlen/Callback: ' . $e, 3, null, null, null, true);
+        }
 
-    $notification = new Barzahlen_Notification(Configuration::get('barzahlen_shopid'), Configuration::get('barzahlen_notificationkey'), $_GET);
+        if (!$notification->isValid()) {
+            $this->_sendHeader(400);
+        }
 
-    try {
-      $notification->validate();
-    }
-    catch (Exception $e) {
-      LoggerCore::addLog('Barzahlen/Callback: ' . $e, 3, null, null, null, true);
-    }
+        $this->_sendHeader(200);
+        $result = $this->_selectTransaction($notification);
 
-    if(!$notification->isValid()) {
-      $this->_sendHeader(400);
-    }
+        if (count($result) == 0) {
+            LoggerCore::addLog('Barzahlen/Callback: No pending transaction found for order ID ' . $notification->getOrderId() . ' and transaction ID ' . $notification->getTransactionId() . '.', 3, null, null, null, true);
+            return;
+        } else {
+            $order = new Order($result[0]['order_id']);
+        }
 
-    $this->_sendHeader(200);
-    $result = $this->_selectTransaction($notification);
-
-    if(count($result) == 0) {
-      LoggerCore::addLog('Barzahlen/Callback: No pending transaction found for order ID '.$notification->getOrderId().' and transaction ID '.$notification->getTransactionId().'.', 3, null, null, null, true);
-      return;
-    }
-    else {
-      $order = new Order($result[0]['order_id']);
-    }
-
-    if($this->_checkOrderValues($notification, $order)) {
-
-      switch ($notification->getState()) {
-        case self::STATE_PAID:
-          $order->setCurrentState(Configuration::get('BARZAHLEN_PAID'));
-          $this->_updateTransactionState($notification->getTransactionId(), self::STATE_PAID);
-          break;
-        case self::STATE_EXPIRED:
-          $order->setCurrentState(Configuration::get('BARZAHLEN_EXPIRED'));
-          $this->_updateTransactionState($notification->getTransactionId(), self::STATE_EXPIRED);
-          break;
-        default:
-          LoggerCore::addLog('Barzahlen/Callback: Unable to handle given state '.$notification->getState().'.', 3, null, null, null, true);
-      }
-    }
-  }
-
-  /**
-   * Looks up the corresponding from the databse.
-   *
-   * @param Barzahlen_Notification $notification
-   * @return array
-   */
-  protected function _selectTransaction(Barzahlen_Notification $notification) {
-
-    $sql = "SELECT * FROM `"._DB_PREFIX_."barzahlen_transactions`
-             WHERE transaction_id = '".(int)$notification->getTransactionId()."'
-               AND transaction_state = '".self::STATE_PENDING."'";
-
-    if($notification->getOrderId() != null) {
-      $sql .= " AND order_id = '".(int)$notification->getOrderId()."'";
+        switch ($notification->getState()) {
+            case self::STATE_PAID:
+                $order->setCurrentState(Configuration::get('BARZAHLEN_PAID'));
+                $this->_updateTransactionState($notification->getTransactionId(), self::STATE_PAID);
+                break;
+            case self::STATE_EXPIRED:
+                $order->setCurrentState(Configuration::get('BARZAHLEN_EXPIRED'));
+                $this->_updateTransactionState($notification->getTransactionId(), self::STATE_EXPIRED);
+                break;
+            default:
+                LoggerCore::addLog('Barzahlen/Callback: Unable to handle given state ' . $notification->getState() . '.', 3, null, null, null, true);
+        }
     }
 
-    return Db::getInstance()->executeS($sql);
-  }
+    /**
+     * Looks up the corresponding from the databse.
+     *
+     * @param Barzahlen_Notification $notification
+     * @return array
+     */
+    protected function _selectTransaction(Barzahlen_Notification $notification)
+    {
+        $sql = "SELECT * FROM `" . _DB_PREFIX_ . "barzahlen_transactions`
+                 WHERE transaction_id = '" . (int) $notification->getTransactionId() . "'
+                   AND transaction_state = '" . self::STATE_PENDING . "'";
 
-  /**
-   * Compares amount and currency for order and notification values.
-   *
-   * @param Barzahlen_Notification $notification
-   * @param Order $order
-   * @return boolean
-   */
-  protected function _checkOrderValues(Barzahlen_Notification $notification, Order $order) {
+        if ($notification->getOrderId() != null) {
+            $sql .= " AND order_id = '" . (int) $notification->getOrderId() . "'";
+        }
 
-    $result = OrderPayment::getByOrderReference($order->reference);
-    $payment = $result[0];
-    $currency = new Currency($payment->id_currency);
-
-    if($payment->amount != $notification->getAmount()) {
-      LoggerCore::addLog('Barzahlen/Callback: Given amount of '.$notification->getAmount().' doen\'t match amount of order '.$order->id.'.', 3, null, null, null, true);
-      return false;
+        return Db::getInstance()->executeS($sql);
     }
 
-    if($currency->iso_code != $notification->getCurrency()) {
-      LoggerCore::addLog('Barzahlen/Callback: Given currency '.$notification->getCurrency().' doen\'t match currency of order '.$order->id.'.', 3, null, null, null, true);
-      return false;
+    /**
+     * Updates the transaction in the database.
+     *
+     * @param integer $transactionId transaction id
+     * @param string $state new transaction state
+     */
+    protected function _updateTransactionState($transactionId, $state)
+    {
+        $sql = "UPDATE `" . _DB_PREFIX_ . "barzahlen_transactions`
+                   SET transaction_state = '" . $state . "'
+                 WHERE transaction_id = '" . (int) $transactionId . "'";
+
+        Db::getInstance()->execute($sql);
     }
 
-    return true;
-  }
-
-  /**
-   * Updates the transaction in the database.
-   *
-   * @param integer $transactionId transaction id
-   * @param string $state new transaction state
-   */
-  protected function _updateTransactionState($transactionId, $state) {
-
-    $sql = "UPDATE `"._DB_PREFIX_."barzahlen_transactions`
-               SET transaction_state = '".$state."'
-             WHERE transaction_id = '".(int)$transactionId."'";
-
-    Db::getInstance()->execute($sql);
-  }
-
-  /**
-   * Send the header depending on the notification validation.
-   *
-   * @param integer $code status code
-   */
-  protected function _sendHeader($code) {
-
-    if($code == 200) {
-      header("HTTP/1.1 200 OK");
-      header("Status: 200 OK");
+    /**
+     * Send the header depending on the notification validation.
+     *
+     * @param integer $code status code
+     */
+    protected function _sendHeader($code)
+    {
+        if ($code == 200) {
+            header("HTTP/1.1 200 OK");
+            header("Status: 200 OK");
+        } else {
+            header("HTTP/1.1 400 Bad Request");
+            header("Status: 400 Bad Request");
+            die();
+        }
     }
-    else {
-      header("HTTP/1.1 400 Bad Request");
-      header("Status: 400 Bad Request");
-      die();
-    }
-  }
 }

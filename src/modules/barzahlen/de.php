@@ -28,6 +28,7 @@ $_MODULE['<{barzahlen}prestashop>barzahlen_f7a0ec6eface594351e1a6e05af59a7e'] = 
 $_MODULE['<{barzahlen}prestashop>barzahlen_ac2e21a9827e093b9955c6cb97007dca'] = 'Benachrichtigungsschlüssel';
 $_MODULE['<{barzahlen}prestashop>barzahlen_24397caa1f4a3c44ed8f2da325852017'] = 'Erweitertes Logging';
 $_MODULE['<{barzahlen}prestashop>barzahlen_b17f3f4dcf653a5776792498a9b44d6a'] = 'Einstellungen speichern';
+$_MODULE['<{barzahlen}prestashop>barzahlen_c5bbe1f842cfd421b2e601dc37291b48'] = 'Für das Barzahlen-Plugin ist eine neue Version (%s) verfügbar. Jetzt ansehen?';
 $_MODULE['<{barzahlen}prestashop>payment_execution_4646a4a094a491d38e8b03b2b19a7162'] = 'Barzahlen';
 $_MODULE['<{barzahlen}prestashop>payment_execution_f1d3b424cd68795ecaa552883759aceb'] = 'Bestellübersicht';
 $_MODULE['<{barzahlen}prestashop>payment_execution_879f6b8877752685a966564d072f498f'] = 'Ihr Warenkorb ist leer.';

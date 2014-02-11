@@ -21,23 +21,20 @@
  * @license     http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
  */
 
-class Barzahlen_Request_Update extends Barzahlen_Request_Base
+class Barzahlen_Request_Cancel extends Barzahlen_Request_Base
 {
-    protected $_type = 'update'; //!< request type
-    protected $_transactionId; //!< origin transaction id
-    protected $_orderId; //!< order id
-    protected $_xmlAttributes = array('transaction-id', 'result', 'hash'); //!< update xml content
+    protected $_type = 'cancel'; //!< request type
+    protected $_transactionId; //!< transaction id
+    protected $_xmlAttributes = array('transaction-id', 'result', 'hash'); //!< cancel xml content
 
     /**
      * Construtor to set variable request settings.
      *
-     * @param string $transactionId origin transaction id
-     * @param string $orderId order id
+     * @param string $transactionId transaction id
      */
-    public function __construct($transactionId, $orderId)
+    public function __construct($transactionId)
     {
         $this->_transactionId = $transactionId;
-        $this->_orderId = $orderId;
     }
 
     /**
@@ -54,7 +51,7 @@ class Barzahlen_Request_Update extends Barzahlen_Request_Base
         $requestArray = array();
         $requestArray['shop_id'] = $shopId;
         $requestArray['transaction_id'] = $this->_transactionId;
-        $requestArray['order_id'] = $this->_orderId;
+        $requestArray['language'] = $language;
         $requestArray['hash'] = $this->_createHash($requestArray, $paymentKey);
 
         $this->_removeEmptyValues($requestArray);

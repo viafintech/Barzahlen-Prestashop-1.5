@@ -14,7 +14,7 @@
 <form action="{$link->getModuleLink('barzahlen', 'validation', [], true)}" method="post">
 
 <img src="https://cdn.barzahlen.de/images/barzahlen_logo.png" alt="{l s='Barzahlen' mod='barzahlen'}"/><br/><br/>
-<p>{l s='After completing your order you get a payment slip from Barzahlen that you can easily print out or have it sent via SMS to your mobile phone. With the help of that payment slip you can pay your online purchase at one of our retail partners (e.g. supermarket).' mod='barzahlen'}</p>
+<p><img src="https://cdn.barzahlen.de/images/barzahlen_special.png" style="float: right; margin-left: 10px; max-width: 180px; max-height: 180px;">{l s='After completing your order you get a payment slip from Barzahlen that you can easily print out or have it sent via SMS to your mobile phone. With the help of that payment slip you can pay your online purchase at one of our retail partners (e.g. supermarket).' mod='barzahlen'}</p>
 {if $barzahlen_sandbox}
   <p>{l s='The <strong>Sandbox Mode</strong> is active. All placed orders receive a test payment slip. Test payment slips cannot be handled by our retail partners.' mod='barzahlen'}</p>
 {/if}

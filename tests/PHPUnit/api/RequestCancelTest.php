@@ -21,21 +21,21 @@
  * @license     http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
  */
 
-class RequestResendTest extends PHPUnit_Framework_TestCase
+class RequestCancelTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Testing the construction of a resend request array.
+     * Testing the construction of a cancel request array.
      */
     public function testBuildRequestArray()
     {
-        $resend = new Barzahlen_Request_Resend('7691945');
+        $cancel = new Barzahlen_Request_Cancel('7691945');
 
         $requestArray = array('shop_id' => '10483',
             'transaction_id' => '7691945',
             'language' => 'de',
             'hash' => 'b344aebfb7b9c99c9894b096265f414cbd29223dd8314062fecdeedcd5e46b59f2906a7f5525b6564c85e42053063d49585ee1c108507304bc89b6e44623d44f');
 
-        $this->assertEquals($requestArray, $resend->buildRequestArray(SHOPID, PAYMENTKEY, 'de'));
+        $this->assertEquals($requestArray, $cancel->buildRequestArray(SHOPID, PAYMENTKEY, 'de'));
     }
 
     /**
@@ -50,11 +50,11 @@ class RequestResendTest extends PHPUnit_Framework_TestCase
                       <hash>d6b01ae78c6a7d1b6895b0cf08040095b5bd66c4f589556cfa591b956fa94bedfe032de843b17d36b7f865cb6689797cafa40c53815609217fa210e1b0ee9ee8</hash>
                     </response>';
 
-        $resend = new Barzahlen_Request_Resend('7691945');
-        $resend->parseXml($xmlResponse, PAYMENTKEY);
+        $cancel = new Barzahlen_Request_Cancel('7691945');
+        $cancel->parseXml($xmlResponse, PAYMENTKEY);
 
-        $this->assertEquals('7691945', $resend->getTransactionId());
-        $this->assertTrue($resend->isValid());
+        $this->assertEquals('7691945', $cancel->getTransactionId());
+        $this->assertTrue($cancel->isValid());
     }
 
     /**
@@ -70,10 +70,10 @@ class RequestResendTest extends PHPUnit_Framework_TestCase
                       <error-message>transaction already paid</error-message>
                     </response>';
 
-        $resend = new Barzahlen_Request_Resend('7691945');
-        $resend->parseXml($xmlResponse, PAYMENTKEY);
+        $cancel = new Barzahlen_Request_Cancel('7691945');
+        $cancel->parseXml($xmlResponse, PAYMENTKEY);
 
-        $this->assertFalse($resend->isValid());
+        $this->assertFalse($cancel->isValid());
     }
 
     /**
@@ -85,10 +85,10 @@ class RequestResendTest extends PHPUnit_Framework_TestCase
     {
         $xmlResponse = '';
 
-        $resend = new Barzahlen_Request_Resend('7691945');
-        $resend->parseXml($xmlResponse, PAYMENTKEY);
+        $cancel = new Barzahlen_Request_Cancel('7691945');
+        $cancel->parseXml($xmlResponse, PAYMENTKEY);
 
-        $this->assertFalse($resend->isValid());
+        $this->assertFalse($cancel->isValid());
     }
 
     /**
@@ -104,10 +104,10 @@ class RequestResendTest extends PHPUnit_Framework_TestCase
                       <hash>d6b01ae78c6a7d1b6895b0cf08040095b5bd66c4f589556cfa591b956fa94bedfe032de843b17d36b7f865cb6689797cafa40c53815609217fa210e1b0ee9ee8</hash>
                     </response>';
 
-        $resend = new Barzahlen_Request_Resend('7691945');
-        $resend->parseXml($xmlResponse, PAYMENTKEY);
+        $cancel = new Barzahlen_Request_Cancel('7691945');
+        $cancel->parseXml($xmlResponse, PAYMENTKEY);
 
-        $this->assertFalse($resend->isValid());
+        $this->assertFalse($cancel->isValid());
     }
 
     /**
@@ -124,10 +124,10 @@ class RequestResendTest extends PHPUnit_Framework_TestCase
                       <hash>d6b01ae78c6a7d1b6895b0cf08040095b5bd66c4f589556cfa591b956fa94bedfe032de843b17d36b7f865cb6689797cafa40c53815609217fa210e1b0ee9ee8</hash>
                     </response>';
 
-        $resend = new Barzahlen_Request_Resend('7691945');
-        $resend->parseXml($xmlResponse, PAYMENTKEY);
+        $cancel = new Barzahlen_Request_Cancel('7691945');
+        $cancel->parseXml($xmlResponse, PAYMENTKEY);
 
-        $this->assertFalse($resend->isValid());
+        $this->assertFalse($cancel->isValid());
     }
 
     /**
@@ -144,10 +144,10 @@ class RequestResendTest extends PHPUnit_Framework_TestCase
                       <hash>d6b01ae78c6a7d1b6895b0cf08040095b5bd66c4f589556cfa591b956fa94bedfe032de843b17d36b7f865cb6689797cafa40c53815609217fa210e1b0ee9ee8
                     </response>';
 
-        $resend = new Barzahlen_Request_Resend('7691945');
-        $resend->parseXml($xmlResponse, PAYMENTKEY);
+        $cancel = new Barzahlen_Request_Cancel('7691945');
+        $cancel->parseXml($xmlResponse, PAYMENTKEY);
 
-        $this->assertFalse($resend->isValid());
+        $this->assertFalse($cancel->isValid());
     }
 
     /**
@@ -155,7 +155,7 @@ class RequestResendTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRequestType()
     {
-        $resend = new Barzahlen_Request_Resend('7691945');
-        $this->assertEquals('resend_email', $resend->getRequestType());
+        $cancel = new Barzahlen_Request_Cancel('7691945');
+        $this->assertEquals('cancel', $cancel->getRequestType());
     }
 }

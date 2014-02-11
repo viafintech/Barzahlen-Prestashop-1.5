@@ -1,2 +1,6 @@
+==1.0.1 (11.03.2013)==
+* changed image urls to make use of https
+* updated cURL certificate bundle
+
 ==1.0.0 (06.03.2013)==
 * initial release

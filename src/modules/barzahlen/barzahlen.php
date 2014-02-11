@@ -34,7 +34,7 @@ class Barzahlen extends PaymentModule {
 
     $this->name = 'barzahlen';
     $this->tab = 'payments_gateways';
-    $this->version = '1.0.0';
+    $this->version = '1.0.1';
     $this->author = 'Zerebro Internet GmbH';
     $this->currencies = true;
     $this->currencies_mode = 'checkbox';

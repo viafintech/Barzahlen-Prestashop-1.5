@@ -46,6 +46,11 @@ class BarzahlenValidationModuleFrontController extends ModuleFrontController
         $amount = $this->context->cart->getOrderTotal(true, Cart::BOTH);
         $payment = new Barzahlen_Request_Payment($customerEmail, $customerStreetNr, $customerZipcode, $customerCity, $customerCountry, $amount);
 
+        // catch additional requests created by multiple "buy now"-button clicks
+        if($amount == null) {
+	        Tools::redirectLink(__PS_BASE_URI__ . 'order-confirmation.php?key=' . $customer->secure_key . '&id_cart=' . (int) $this->context->cart->id . '&id_module=' . (int) $this->module->id . '&id_order=' . (int) $this->module->currentOrder);
+        }
+
         try {
             $api->handleRequest($payment);
         } catch (Exception $e) {

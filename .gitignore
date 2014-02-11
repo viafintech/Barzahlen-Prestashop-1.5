@@ -1,1 +1,4 @@
 .DS_Store
+/build/*
+/cache.properties
+/tests/barzahlen.log

@@ -2,23 +2,9 @@
 /**
  * Barzahlen Payment Module SDK
  *
- * NOTICE OF LICENSE
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 3 of the License
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/
- *
- * @copyright   Copyright (c) 2012 Zerebro Internet GmbH (http://www.barzahlen.de)
+ * @copyright   Copyright (c) 2015 Cash Payment Solutions GmbH (https://www.barzahlen.de)
  * @author      Alexander Diebler
- * @license     http://opensource.org/licenses/GPL-3.0  GNU General Public License, version 3 (GPL-3.0)
+ * @license     The MIT License (MIT) - http://opensource.org/licenses/MIT
  */
 
 class Barzahlen_Request_Payment extends Barzahlen_Request_Base
@@ -32,6 +18,7 @@ class Barzahlen_Request_Payment extends Barzahlen_Request_Base
     protected $_orderId; //!< order id
     protected $_amount; //!< payment amount
     protected $_currency; //!< currency of payment (ISO 4217)
+    protected $_dueDate; //!< due date for payment (ISO 8601)
     protected $_customVar = array('', '', ''); //!< custom variables
     protected $_xmlAttributes = array('transaction-id', 'payment-slip-link', 'expiration-notice',
         'infotext-1', 'infotext-2', 'result', 'hash'); //!< payment xml content
@@ -46,17 +33,19 @@ class Barzahlen_Request_Payment extends Barzahlen_Request_Base
      * @param string $amount payment amount
      * @param string $currency currency of payment (ISO 4217)
      * @param string $orderId order id
+     * @param string $dueDate due date for payment slip (ISO 8601)
      */
-    public function __construct($customerEmail, $customerStreetNr, $customerZipcode, $customerCity, $customerCountry, $amount, $currency = 'EUR', $orderId = '')
+    public function __construct($customerEmail, $customerStreetNr, $customerZipcode, $customerCity, $customerCountry, $amount, $currency = 'EUR', $orderId = '', $dueDate = null)
     {
-        $this->_customerEmail = $customerEmail;
+        $this->_customerEmail = $this->isoConvert($customerEmail);
         $this->_customerStreetNr = $this->isoConvert($customerStreetNr);
         $this->_customerZipcode = $customerZipcode;
         $this->_customerCity = $this->isoConvert($customerCity);
         $this->_customerCountry = $customerCountry;
-        $this->_amount = round($amount, 2);
+        $this->_amount = number_format($amount, 2, '.', '');
         $this->_currency = $currency;
         $this->_orderId = $orderId;
+        $this->_dueDate = $dueDate;
     }
 
     /**
@@ -68,9 +57,9 @@ class Barzahlen_Request_Payment extends Barzahlen_Request_Base
      */
     public function setCustomVar($var0 = '', $var1 = '', $var2 = '')
     {
-        $this->_customVar[0] = $var0;
-        $this->_customVar[1] = $var1;
-        $this->_customVar[2] = $var2;
+        $this->_customVar[0] = $this->isoConvert($var0);
+        $this->_customVar[1] = $this->isoConvert($var1);
+        $this->_customVar[2] = $this->isoConvert($var2);
     }
 
     /**
@@ -99,6 +88,7 @@ class Barzahlen_Request_Payment extends Barzahlen_Request_Base
         $requestArray['custom_var_1'] = $this->_customVar[1];
         $requestArray['custom_var_2'] = $this->_customVar[2];
         $requestArray['hash'] = $this->_createHash($requestArray, $paymentKey);
+        $requestArray['due_date'] = $this->_dueDate;
 
         $this->_removeEmptyValues($requestArray);
         return $requestArray;

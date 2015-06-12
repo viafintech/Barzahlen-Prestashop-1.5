@@ -19,16 +19,16 @@
   <p>{l s='The <strong>Sandbox Mode</strong> is active. All placed orders receive a test payment slip. Test payment slips cannot be handled by our retail partners.' mod='barzahlen'}</p>
 {/if}
 <strong>{l s='Pay at:' mod='barzahlen'}</strong>&nbsp;
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_01.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_02.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_03.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_04.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_05.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_06.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_07.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_08.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_09.png" alt="" style="vertical-align: middle; height: 25px;" />
-<img src="https://cdn.barzahlen.de/images/barzahlen_partner_10.png" alt="" style="vertical-align: middle; height: 25px;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_01.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_02.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_03.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_04.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_05.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_06.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_07.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_08.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_09.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
+<img src="https://cdn.barzahlen.de/images/barzahlen_partner_10.png" alt="" style="height: 1em; vertical-align: -0.1em;" />
 <p class="cart_navigation">
 	<input type="submit" name="submit" value="{l s='I confirm my order' mod='barzahlen'}" class="exclusive_large" />
 	<a href="{$link->getPageLink('order', true, NULL, "step=3")}" class="button_large">{l s='Other payment methods' mod='barzahlen'}</a>

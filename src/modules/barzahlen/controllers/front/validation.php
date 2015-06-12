@@ -2,17 +2,7 @@
 /**
  * Barzahlen Payment Module (PrestaShop)
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to info@barzahlen.de so we can send you a copy immediately.
- *
- * @copyright   Copyright (c) 2012 Zerebro Internet GmbH (http://www.barzahlen.de)
+ * @copyright   Copyright (c) 2015 Cash Payment Solutions GmbH (https://www.barzahlen.de)
  * @author      Alexander Diebler
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL-3.0)
  */
@@ -33,6 +23,7 @@ class BarzahlenValidationModuleFrontController extends ModuleFrontController
         $api = new Barzahlen_Api(Configuration::get('barzahlen_shopid'), Configuration::get('barzahlen_paymentkey'), Configuration::get('barzahlen_sandbox'));
         $api->setDebug(Configuration::get('barzahlen_debug'));
         $api->setLanguage($lang->iso_code);
+        $api->setUserAgent('PrestaShop v' . Configuration::get('PS_INSTALL_VERSION') . ' / Plugin v1.0.5');
 
         $customer = new Customer((int) $this->context->cart->id_customer);
         $address = new Address($this->context->cart->id_address_invoice);
